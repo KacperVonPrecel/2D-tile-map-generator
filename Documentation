@@ -1,0 +1,7 @@
+Klasy: TileMap, PerlinNoiseMap, TerrainBlock
+
+TileMap - Klasa generuje i przechowuje mapę 2D. Ma metody pozwalające na generację mapy, do jej graficznego przedstawienia, do zapisu mapy oraz do wczytnia mapy z pliku.
+
+PerlinNoiseMap - Klasa generuje mapę szumów Perlina, z której będzie można wygenerować właściwa mapę.
+
+TerrainBlock - Klasa przechowuje rodzaje terenów i determinuje na podstawie kryteriów jakie podłoże wstawić do podanego pola mapy.
