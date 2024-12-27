@@ -1,6 +1,18 @@
 import numpy as np
 from PIL import Image
 from perlin_noise import PerlinNoise
+from terrain import Terrain
+
+
+def get_terrain(height, moisture, temperature):
+    terrain_list = [
+        Terrain("Grasslands", 0.35, 0.35, 0.60, [62, 209, 40]),
+        Terrain("Desserts", 0.30, 0.00, 0.90, [235, 206, 19]),
+        Terrain("Sea", 0.20, 1.00, 0.40, [19, 141, 235]),
+        Terrain("Ocean", 0.10, 1.00, 0.35, [19, 48, 235]),
+        Terrain("Mountains", 0.75, 0.60, 0.20, [145, 145, 148]),
+        Terrain("Woodlands", 0.45, 0.50, 0.50, [26, 99, 15])
+    ]
 
 
 class TileMap:
