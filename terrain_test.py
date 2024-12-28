@@ -7,4 +7,4 @@ def test_create_typical():
     assert terrain.height_min == 0.1
     assert terrain.moisture_min == 0.5
     assert terrain.temperature_min == 0.5
-    assert terrain.colour_rgb == [255, 0, 0]
+    assert terrain.rgb == [255, 0, 0]

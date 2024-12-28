@@ -23,5 +23,5 @@ class Terrain:
         return self._temperature_min
 
     @property
-    def colour_rgb(self):
+    def rgb(self):
         return self._colour_RGB
