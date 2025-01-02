@@ -121,7 +121,7 @@ def load_map(path_from):
         data = json.load(file_handle)
         height = data[0]
         width = data[1]
-        seed = data[2]
+        seed = data[2] if data[2] != " " else None
         map_to_load = TileMap(height, width, seed)
 
         array_in_file = data[3:]
@@ -140,7 +140,11 @@ def write_map(path_to: str, map_to_save: TileMap):
     data = []
     data.append(map_to_save.height)
     data.append(map_to_save.width)
-    data.append(map_to_save.seed)
+    if map_to_save.seed is not None:
+        data.append(map_to_save.seed)
+    else:
+        data.append(" ")
+
     for row in range(map_to_save._height):
         for column in range(map_to_save._width):
             red_value = int(map_to_save._map_array[row][column][0])
@@ -158,7 +162,7 @@ def write_map(path_to: str, map_to_save: TileMap):
 
 
 def main():
-    test_map = TileMap(100, 100, 14)
+    test_map = TileMap(100, 100)
     test_map.generate_map()
     test_map.show_map("map1")
     write_map("test.txt", test_map)
