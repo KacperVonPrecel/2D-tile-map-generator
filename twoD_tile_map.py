@@ -110,10 +110,10 @@ class TileMap:
                 terrain_fill = get_terrain(height, moisture, temperature)
                 np.put(self._map_array[row][column], [0, 1, 2], terrain_fill.rgb)
 
-    def show_map(self):
+    def show_map(self, map_name):
         img = Image.fromarray(self._map_array)
         # img.show()
-        img.save("test.png")
+        img.save(f"{map_name}.png")
 
 
 def load_map(path_from):
@@ -124,14 +124,14 @@ def load_map(path_from):
         seed = data[2]
         map_to_load = TileMap(height, width, seed)
 
-        position = 3
-        for position in range(len(data)):
-            pixel = data[position]
-            row = np.uint(pixel["y_axis"])
-            column = np.uint(pixel["x_axis"])
-            map_to_load._map_array[row][column][0] = np.uint(pixel["red"])
-            map_to_load._map_array[row][column][1] = np.uint(pixel["green"])
-            map_to_load._map_array[row][column][2] = np.uint(pixel["blue"])
+        array_in_file = data[3:]
+        for position in range(height * width):
+            pixel = array_in_file[position]
+            row = np.uint8(pixel["y_axis"])
+            column = np.uint8(pixel["x_axis"])
+            map_to_load._map_array[row][column][0] = np.uint8(pixel["red"])
+            map_to_load._map_array[row][column][1] = np.uint8(pixel["green"])
+            map_to_load._map_array[row][column][2] = np.uint8(pixel["blue"])
 
     return map_to_load
 
@@ -158,12 +158,12 @@ def write_map(path_to: str, map_to_save: TileMap):
 
 
 def main():
-    test_map = TileMap(50, 50, 103769)
+    test_map = TileMap(100, 100, 14)
     test_map.generate_map()
-    # test_map.show_map()
-    # test_map.write_map("test.txt")
+    test_map.show_map("map1")
+    write_map("test.txt", test_map)
     loaded_map = load_map("test.txt")
-    loaded_map.show_map()
+    loaded_map.show_map("map2")
 
 
 if __name__ == "__main__":
