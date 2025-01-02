@@ -1,4 +1,5 @@
 import numpy as np
+import json
 from PIL import Image
 from perlin_noise import PerlinNoise
 from terrain import Terrain
@@ -58,6 +59,18 @@ class TileMap:
         self._height = height
         self._width = width
 
+    @property
+    def height(self):
+        return self._height
+
+    @property
+    def width(self):
+        return self._width
+
+    @property
+    def seed(self):
+        return self._seed
+
     def generate_map(self):
         height_noise1 = PerlinNoise(7, self._seed)
         height_noise2 = PerlinNoise(14, self._seed)
@@ -74,11 +87,20 @@ class TileMap:
         hg = self._height
         wd = self._width
 
-        height_array = create_array(hg, wd, height_noise1, height_noise2, height_noise3)
+        height_array = create_array(hg, wd,
+                                    height_noise1,
+                                    height_noise2,
+                                    height_noise3)
 
-        moisture_array = create_array(hg, wd, moisture_noise1, moisture_noise2, moisture_noise3)
+        moisture_array = create_array(hg, wd,
+                                    moisture_noise1,
+                                    moisture_noise2,
+                                    moisture_noise3)
 
-        temperature_array = create_array(hg, wd, temperature_noise1, temperature_noise2, temperature_noise3)
+        temperature_array = create_array(hg, wd,
+                                    temperature_noise1,
+                                    temperature_noise2,
+                                    temperature_noise3)
 
         for row in range(len(self._map_array)):
             for column in range(len(self._map_array[row])):
@@ -88,21 +110,60 @@ class TileMap:
                 terrain_fill = get_terrain(height, moisture, temperature)
                 np.put(self._map_array[row][column], [0, 1, 2], terrain_fill.rgb)
 
-    def load_map(self, path_from):
-        pass
-
-    def write_map(self, path_to):
-        pass
-
-    def save(self):
+    def show_map(self):
         img = Image.fromarray(self._map_array)
+        # img.show()
         img.save("test.png")
 
 
+def load_map(path_from):
+    with open(path_from, "r") as file_handle:
+        data = json.load(file_handle)
+        height = data[0]
+        width = data[1]
+        seed = data[2]
+        map_to_load = TileMap(height, width, seed)
+
+        position = 3
+        for position in range(len(data)):
+            pixel = data[position]
+            row = np.uint(pixel["y_axis"])
+            column = np.uint(pixel["x_axis"])
+            map_to_load._map_array[row][column][0] = np.uint(pixel["red"])
+            map_to_load._map_array[row][column][1] = np.uint(pixel["green"])
+            map_to_load._map_array[row][column][2] = np.uint(pixel["blue"])
+
+    return map_to_load
+
+
+def write_map(path_to: str, map_to_save: TileMap):
+    data = []
+    data.append(map_to_save.height)
+    data.append(map_to_save.width)
+    data.append(map_to_save.seed)
+    for row in range(map_to_save._height):
+        for column in range(map_to_save._width):
+            red_value = int(map_to_save._map_array[row][column][0])
+            green_value = int(map_to_save._map_array[row][column][1])
+            blue_value = int(map_to_save._map_array[row][column][2])
+
+            one_pixel = dict(y_axis=row, x_axis=column,
+                            red=red_value,
+                            green=green_value,
+                            blue=blue_value)
+
+            data.append(one_pixel)
+    with open(path_to, "w") as file_handle:
+        json.dump(data, file_handle, indent=5)
+
+
 def main():
-    test_map = TileMap(300, 300, 103769)
+    test_map = TileMap(50, 50, 103769)
     test_map.generate_map()
-    test_map.save()
+    # test_map.show_map()
+    # test_map.write_map("test.txt")
+    loaded_map = load_map("test.txt")
+    loaded_map.show_map()
 
 
 if __name__ == "__main__":
