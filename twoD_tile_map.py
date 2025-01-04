@@ -3,6 +3,7 @@ import json
 from PIL import Image
 from perlin_noise import PerlinNoise
 from terrain import Terrain
+from io import BytesIO
 
 
 def diffrence_val(terrain: Terrain, height: float, moisture: float, temp: float):
@@ -53,7 +54,7 @@ def create_array(height, width, noise1, noise2, noise3):
 
 
 class TileMap:
-    def __init__(self, height, width, seed=None):
+    def __init__(self, height=50, width=50, seed=None):
         self._seed = seed
         self._map_array = np.zeros([height, width, 3], dtype=np.uint8)
         self._height = height
@@ -110,7 +111,12 @@ class TileMap:
                 terrain_fill = get_terrain(height, moisture, temperature)
                 np.put(self._map_array[row][column], [0, 1, 2], terrain_fill.rgb)
 
-    def show_map(self, map_name):
+        buffer = BytesIO()
+        img = Image.fromarray(self._map_array, mode="RGB")
+        img.save(buffer, "PNG")
+        return buffer.getvalue()
+
+    def save_map(self, map_name):
         img = Image.fromarray(self._map_array)
         # img.show()
         img.save(f"{map_name}.png")
@@ -127,8 +133,8 @@ def load_map(path_from):
         array_in_file = data[3:]
         for position in range(height * width):
             pixel = array_in_file[position]
-            row = np.uint8(pixel["y_axis"])
-            column = np.uint8(pixel["x_axis"])
+            row = (pixel["y_axis"])
+            column = (pixel["x_axis"])
             map_to_load._map_array[row][column][0] = np.uint8(pixel["red"])
             map_to_load._map_array[row][column][1] = np.uint8(pixel["green"])
             map_to_load._map_array[row][column][2] = np.uint8(pixel["blue"])
@@ -162,13 +168,9 @@ def write_map(path_to: str, map_to_save: TileMap):
 
 
 def main():
-    test_map = TileMap(100, 100)
+    test_map = TileMap(50, 50)
     test_map.generate_map()
-    test_map.show_map("map1")
-    write_map("test.txt", test_map)
-    loaded_map = load_map("test.txt")
-    loaded_map.show_map("map2")
-
+    test_map.save_map("map1")
 
 if __name__ == "__main__":
     main()
