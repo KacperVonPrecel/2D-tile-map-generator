@@ -1,5 +1,4 @@
 import numpy as np
-import json
 from PIL import Image
 from perlin_noise import PerlinNoise
 from terrain import Terrain
@@ -115,61 +114,3 @@ class TileMap:
         img = Image.fromarray(self._map_array, mode="RGB")
         img.save(buffer, "PNG")
         return buffer.getvalue()
-
-    def save_map(self, map_name):
-        img = Image.fromarray(self._map_array)
-        # img.show()
-        img.save(f"{map_name}.png")
-
-
-def load_map(file_handle):
-    data = json.load(file_handle)
-    height = data[0]
-    width = data[1]
-    seed = data[2] if data[2] != " " else None
-    map_to_load = TileMap(height, width, seed)
-
-    array_in_file = data[3:]
-    for position in range(height * width):
-        pixel = array_in_file[position]
-        row = (pixel["y_axis"])
-        column = (pixel["x_axis"])
-        map_to_load._map_array[row][column][0] = np.uint8(pixel["red"])
-        map_to_load._map_array[row][column][1] = np.uint8(pixel["green"])
-        map_to_load._map_array[row][column][2] = np.uint8(pixel["blue"])
-
-    return map_to_load
-
-
-def write_map(map_to_save: TileMap, file_handle):
-    data = []
-    data.append(map_to_save.height)
-    data.append(map_to_save.width)
-    if map_to_save.seed is not None:
-        data.append(map_to_save.seed)
-    else:
-        data.append(" ")
-
-    for row in range(map_to_save._height):
-        for column in range(map_to_save._width):
-            red_value = int(map_to_save._map_array[row][column][0])
-            green_value = int(map_to_save._map_array[row][column][1])
-            blue_value = int(map_to_save._map_array[row][column][2])
-
-            one_pixel = dict(y_axis=row, x_axis=column,
-                            red=red_value,
-                            green=green_value,
-                            blue=blue_value)
-
-            data.append(one_pixel)
-
-    json.dump(data, file_handle, indent=5)
-
-
-def main():
-    test_map = TileMap(50, 50)
-    test_map.generate_map()
-    test_map.save_map("map1")
-
-if __name__ == "__main__":
-    main()

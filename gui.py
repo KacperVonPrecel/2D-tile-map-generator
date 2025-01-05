@@ -20,7 +20,6 @@ class MapGeneratorWindow(QMainWindow):
         self.ui.seed_box.setValidator(int_bottom_margin)
         self._pix_height = 50
         self._pix_width = 50
-        self._current_map = None
 
     def setupbuttons(self):
         self.ui.generate_map_button.clicked.connect(self.generate_map_img)
@@ -31,7 +30,9 @@ class MapGeneratorWindow(QMainWindow):
     def scalemap(self):
         scalefactor = self.ui.scaleslider.value()
         pixmap = self.ui.map_box.pixmap()
-        scaled_pixmap = pixmap.scaled(self._pix_width * scalefactor, self._pix_height * scalefactor, Qt.AspectRatioMode.KeepAspectRatio)
+        scaled_pixmap = pixmap.scaled(self._pix_width * scalefactor,
+                                     self._pix_height * scalefactor,
+                                     Qt.AspectRatioMode.KeepAspectRatio)
         self.ui.map_box.setPixmap(scaled_pixmap)
 
     def generate_map_img(self):
@@ -49,9 +50,10 @@ class MapGeneratorWindow(QMainWindow):
         image_data = map_to_generate.generate_map()
         pixmap = QPixmap()
         if pixmap.loadFromData(image_data):
-            pixmap.scaled(pixmap.width(), pixmap.height(), Qt.AspectRatioMode.KeepAspectRatio)
+            pixmap.scaled(pixmap.width(),
+                          pixmap.height(),
+                          Qt.AspectRatioMode.KeepAspectRatio)
             self.ui.map_box.setPixmap(pixmap)
-            self._current_map = self.ui.map_box.pixmap().toImage()
 
     def save_map(self):
         name, _ = QFileDialog.getSaveFileName(self, 'Save Map')
@@ -62,7 +64,9 @@ class MapGeneratorWindow(QMainWindow):
         name, _ = QFileDialog.getOpenFileName(self, 'Load Map')
         map_to_load = QPixmap()
         map_to_load.load(name)
-        map_to_load.scaled(map_to_load.width(), map_to_load.height(), Qt.AspectRatioMode.KeepAspectRatio)
+        map_to_load.scaled(map_to_load.width(),
+                           map_to_load.height(),
+                           Qt.AspectRatioMode.KeepAspectRatio)
         self.ui.map_box.setPixmap(map_to_load)
 
 
