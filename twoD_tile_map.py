@@ -122,27 +122,26 @@ class TileMap:
         img.save(f"{map_name}.png")
 
 
-def load_map(path_from):
-    with open(path_from, "r") as file_handle:
-        data = json.load(file_handle)
-        height = data[0]
-        width = data[1]
-        seed = data[2] if data[2] != " " else None
-        map_to_load = TileMap(height, width, seed)
+def load_map(file_handle):
+    data = json.load(file_handle)
+    height = data[0]
+    width = data[1]
+    seed = data[2] if data[2] != " " else None
+    map_to_load = TileMap(height, width, seed)
 
-        array_in_file = data[3:]
-        for position in range(height * width):
-            pixel = array_in_file[position]
-            row = (pixel["y_axis"])
-            column = (pixel["x_axis"])
-            map_to_load._map_array[row][column][0] = np.uint8(pixel["red"])
-            map_to_load._map_array[row][column][1] = np.uint8(pixel["green"])
-            map_to_load._map_array[row][column][2] = np.uint8(pixel["blue"])
+    array_in_file = data[3:]
+    for position in range(height * width):
+        pixel = array_in_file[position]
+        row = (pixel["y_axis"])
+        column = (pixel["x_axis"])
+        map_to_load._map_array[row][column][0] = np.uint8(pixel["red"])
+        map_to_load._map_array[row][column][1] = np.uint8(pixel["green"])
+        map_to_load._map_array[row][column][2] = np.uint8(pixel["blue"])
 
     return map_to_load
 
 
-def write_map(path_to: str, map_to_save: TileMap):
+def write_map(map_to_save: TileMap, file_handle):
     data = []
     data.append(map_to_save.height)
     data.append(map_to_save.width)
@@ -163,8 +162,8 @@ def write_map(path_to: str, map_to_save: TileMap):
                             blue=blue_value)
 
             data.append(one_pixel)
-    with open(path_to, "w") as file_handle:
-        json.dump(data, file_handle, indent=5)
+
+    json.dump(data, file_handle, indent=5)
 
 
 def main():

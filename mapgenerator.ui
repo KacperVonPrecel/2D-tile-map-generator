@@ -350,9 +350,9 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionSave"/>
+    <addaction name="actionSave_Map"/>
     <addaction name="separator"/>
-    <addaction name="actionLoad"/>
+    <addaction name="actionLoad_Map"/>
    </widget>
    <addaction name="menuLoad"/>
   </widget>
@@ -373,18 +373,21 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionSave"/>
+   <addaction name="actionSave_Map"/>
    <addaction name="separator"/>
-   <addaction name="actionLoad"/>
+   <addaction name="actionLoad_Map"/>
   </widget>
-  <action name="actionLoad">
+  <action name="actionLoad_Map">
    <property name="text">
-    <string>Load</string>
+    <string>Load Map</string>
    </property>
   </action>
-  <action name="actionSave">
+  <action name="actionSave_Map">
    <property name="text">
-    <string>Save</string>
+    <string>Save Map</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Map</string>
    </property>
   </action>
  </widget>

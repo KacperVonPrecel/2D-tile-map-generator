@@ -1,20 +1,11 @@
 import sys
-from PyQt6.QtWidgets import QApplication
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout
-from PyQt6.QtWidgets import QMainWindow, QLabel
+from PyQt6.QtWidgets import QApplication, QFileDialog
+from PyQt6.QtWidgets import QMainWindow
 from PyQt6.QtGui import QPixmap, QIntValidator
 from PyQt6.QtCore import Qt
 from ui_mapgenerator import Ui_MainWindow
 
 from twoD_tile_map import TileMap
-
-
-# class MapView(QLabel):
-#    def wheelEvent(self, event):
-#        super().wheelEvent(event)
-#        if event.delta() > 0:
-#            scaled_pixmap =
-#            self.setPixmap()
 
 
 class MapGeneratorWindow(QMainWindow):
@@ -29,11 +20,12 @@ class MapGeneratorWindow(QMainWindow):
         self.ui.seed_box.setValidator(int_bottom_margin)
         self._pix_height = 50
         self._pix_width = 50
+        self._current_map = None
 
     def setupbuttons(self):
         self.ui.generate_map_button.clicked.connect(self.generate_map_img)
-        self.ui.actionLoad.triggered.connect(self.load_map)
-        self.ui.actionSave.triggered.connect(self.save_map)
+        self.ui.actionLoad_Map.triggered.connect(self.load_map)
+        self.ui.actionSave_Map.triggered.connect(self.save_map)
         self.ui.scaleslider.sliderReleased.connect(self.scalemap)
 
     def scalemap(self):
@@ -43,6 +35,7 @@ class MapGeneratorWindow(QMainWindow):
         self.ui.map_box.setPixmap(scaled_pixmap)
 
     def generate_map_img(self):
+        self.ui.scaleslider.setSliderPosition(0)
         if self.ui.height_box.text():
             self._pix_height = int(self.ui.height_box.text())
         if self.ui.width_box.text():
@@ -58,12 +51,19 @@ class MapGeneratorWindow(QMainWindow):
         if pixmap.loadFromData(image_data):
             pixmap.scaled(pixmap.width(), pixmap.height(), Qt.AspectRatioMode.KeepAspectRatio)
             self.ui.map_box.setPixmap(pixmap)
+            self._current_map = self.ui.map_box.pixmap().toImage()
 
     def save_map(self):
-        pass
+        name, _ = QFileDialog.getSaveFileName(self, 'Save Map')
+        map_to_save = self.ui.map_box.pixmap()
+        map_to_save.save(name)
 
     def load_map(self):
-        pass
+        name, _ = QFileDialog.getOpenFileName(self, 'Load Map')
+        map_to_load = QPixmap()
+        map_to_load.load(name)
+        map_to_load.scaled(map_to_load.width(), map_to_load.height(), Qt.AspectRatioMode.KeepAspectRatio)
+        self.ui.map_box.setPixmap(map_to_load)
 
 
 def guimain(args):
