@@ -1,11 +1,24 @@
 import numpy as np
+
 from PIL import Image
 from perlin_noise import PerlinNoise
 from terrain import Terrain
 from io import BytesIO
 
 
-def diffrence_val(terrain: Terrain, height: float, moisture: float, temp: float):
+def difference_val(terrain: Terrain, height: float, moisture: float, temp: float):
+    """
+    Function used to calculate difference value for given terrain and given pixel of map.
+
+    Parameters:
+        terrain: A terrain of Terrain class
+        height: Height value assigned to that given pixel
+        moisture: Moisture value assigned to that given pixel
+        temp: Temperature value assigned to that given pixel
+
+    Returns:
+        float: Difference value.
+    """
     return (
         (height - terrain.height_min) +
         (moisture - terrain.moisture_min) +
@@ -14,6 +27,18 @@ def diffrence_val(terrain: Terrain, height: float, moisture: float, temp: float)
 
 
 def get_terrain(height: float, moisture: float, temperature: float):
+    """
+    Function responsible for choosing what type terrain should be on given pixel.
+
+    Parameters:
+        height: Height value assigned to that given pixel
+        moisture: Moisture value assigned to that given pixel
+        temp: Temperature value assigned to that given pixel
+
+    Returns:
+        Terrain: Chosen terrain for given pixel
+    """
+
     terrain_list = [
         Terrain("Water", -1.00, -1.00, -1.00, [23, 137, 230]),
         Terrain("Grasslands", -0.20, -0.20, -0.20, [62, 209, 40]),
@@ -32,14 +57,32 @@ def get_terrain(height: float, moisture: float, temperature: float):
             checking_list.append(terrain)
 
     for terrain in checking_list:
-        diff_list.append(diffrence_val(terrain, height, moisture, temperature))
+        diff_list.append(difference_val(terrain, height, moisture, temperature))
 
     compare_list = zip(checking_list, diff_list)
     compare_list_sorted = sorted(compare_list, key=lambda x: x[1])
     return compare_list_sorted[0][0]
 
 
-def create_array(height, width, noise1, noise2, noise3):
+def create_array(
+        height: int,
+        width: int,
+        noise1: PerlinNoise,
+        noise2: PerlinNoise,
+        noise3: PerlinNoise
+        ):
+    """
+    Creates map of Perlin noise for given noise parameters.
+
+    Parameters:
+        height: Height of the noise map
+        width: Width of the noise map
+        noise1, noise2, noise3: Noise parameters used to generate noise map
+                                using perlin_noise library
+
+    Returns:
+        2d table containing generated noise map
+    """
     wanted_array = []
     for row in range(height):
         row_table = []
@@ -53,6 +96,9 @@ def create_array(height, width, noise1, noise2, noise3):
 
 
 class TileMap:
+    """
+    Class used to represent a 2d tile map.
+    """
     def __init__(self, height=50, width=50, seed=None):
         self._seed = seed
         self._map_array = np.zeros([height, width, 3], dtype=np.uint8)
