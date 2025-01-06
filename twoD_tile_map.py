@@ -106,7 +106,7 @@ class TileMap:
         width (int): A width of the map
     """
 
-    def __init__(self, height=50, width=50, seed=None):
+    def __init__(self, height: int = 50, width: int = 50, seed: int = None):
         """
         Initializes a TileMap object.
 
@@ -115,10 +115,25 @@ class TileMap:
             width (int): A width of the map
             seed (int): A special number used to generate constantly the same noise map
         """
-        self._seed = seed
-        self._map_array = np.zeros([height, width, 3], dtype=np.uint8)
-        self._height = height
-        self._width = width
+        if seed is not None:
+            if seed < 0:
+                raise ValueError("Seed value needs to be positive integer or zero.")
+
+            try:
+                self._seed = int(seed)
+            except TypeError:
+                return "Seed value needs to be positive integer or zero."
+        else:
+            self._seed = seed
+
+        try:
+            self._map_array = np.zeros([height, width, 3], dtype=np.uint8)
+            self._height = height
+            self._width = width
+        except TypeError:
+            return "Height and width values need to be positive integer."
+        except ValueError:
+            return "Height and width values need to be positive integer."
 
     @property
     def height(self):
