@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(735, 446)
+        MainWindow.resize(668, 400)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -124,7 +124,7 @@ class Ui_MainWindow(object):
         self.mapscrollarea.setWidgetResizable(True)
         self.mapscrollarea.setObjectName("mapscrollarea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 713, 259))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 646, 213))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
@@ -145,7 +145,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addLayout(self.verticalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 735, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 668, 22))
         self.menubar.setObjectName("menubar")
         self.menuLoad = QtWidgets.QMenu(parent=self.menubar)
         self.menuLoad.setObjectName("menuLoad")

@@ -1,12 +1,24 @@
 import numpy as np
-import json
+
 from PIL import Image
 from perlin_noise import PerlinNoise
 from terrain import Terrain
 from io import BytesIO
 
 
-def diffrence_val(terrain: Terrain, height: float, moisture: float, temp: float):
+def difference_val(terrain: Terrain, height: float, moisture: float, temp: float):
+    """
+    Function used to calculate difference value for given terrain and given pixel of map
+
+    Parameters:
+        terrain: A terrain of Terrain class
+        height: Height value assigned to that given pixel
+        moisture: Moisture value assigned to that given pixel
+        temp: Temperature value assigned to that given pixel
+
+    Returns:
+        float: Difference value.
+    """
     return (
         (height - terrain.height_min) +
         (moisture - terrain.moisture_min) +
@@ -15,6 +27,18 @@ def diffrence_val(terrain: Terrain, height: float, moisture: float, temp: float)
 
 
 def get_terrain(height: float, moisture: float, temperature: float):
+    """
+    Function responsible for choosing what type terrain should be on given pixel.
+
+    Parameters:
+        height: Height value assigned to that given pixel
+        moisture: Moisture value assigned to that given pixel
+        temp: Temperature value assigned to that given pixel
+
+    Returns:
+        Terrain: Chosen terrain for given pixel
+    """
+
     terrain_list = [
         Terrain("Water", -1.00, -1.00, -1.00, [23, 137, 230]),
         Terrain("Grasslands", -0.20, -0.20, -0.20, [62, 209, 40]),
@@ -33,14 +57,32 @@ def get_terrain(height: float, moisture: float, temperature: float):
             checking_list.append(terrain)
 
     for terrain in checking_list:
-        diff_list.append(diffrence_val(terrain, height, moisture, temperature))
+        diff_list.append(difference_val(terrain, height, moisture, temperature))
 
     compare_list = zip(checking_list, diff_list)
     compare_list_sorted = sorted(compare_list, key=lambda x: x[1])
     return compare_list_sorted[0][0]
 
 
-def create_array(height, width, noise1, noise2, noise3):
+def create_array(
+        height: int,
+        width: int,
+        noise1: PerlinNoise,
+        noise2: PerlinNoise,
+        noise3: PerlinNoise
+        ):
+    """
+    Creates map of Perlin noise for given noise parameters.
+
+    Parameters:
+        height: Height of the noise map
+        width: Width of the noise map
+        noise1, noise2, noise3: Noise parameters used to generate noise map
+                                using perlin_noise library
+
+    Returns:
+        2d table containing generated noise map
+    """
     wanted_array = []
     for row in range(height):
         row_table = []
@@ -54,11 +96,44 @@ def create_array(height, width, noise1, noise2, noise3):
 
 
 class TileMap:
-    def __init__(self, height=50, width=50, seed=None):
-        self._seed = seed
-        self._map_array = np.zeros([height, width, 3], dtype=np.uint8)
-        self._height = height
-        self._width = width
+    """
+    Class used to represent a 2d tile map.
+
+    Atrributes:
+        seed (int): A special number used to generate constantly the same noise map
+        map_array (numpy 3d_array): An array storing RGB values for each pixel of a map
+        height (int): A height of the map
+        width (int): A width of the map
+    """
+
+    def __init__(self, height: int = 50, width: int = 50, seed: int = None):
+        """
+        Initializes a TileMap object.
+
+        Parameters:
+            height (int): A height of the map
+            width (int): A width of the map
+            seed (int): A special number used to generate constantly the same noise map
+        """
+        if seed is not None:
+            if seed < 0:
+                raise ValueError("Seed value needs to be positive integer or zero.")
+
+            try:
+                self._seed = int(seed)
+            except TypeError:
+                return "Seed value needs to be positive integer or zero."
+        else:
+            self._seed = seed
+
+        try:
+            self._map_array = np.zeros([height, width, 3], dtype=np.uint8)
+            self._height = height
+            self._width = width
+        except TypeError:
+            return "Height and width values need to be positive integer."
+        except ValueError:
+            return "Height and width values need to be positive integer."
 
     @property
     def height(self):
@@ -73,6 +148,14 @@ class TileMap:
         return self._seed
 
     def generate_map(self):
+        """
+        Generate three noise maps of height, moisture and temperature
+        in order to fill up map_array with RGB values.
+
+        Then method returns bytes representation of the map
+        converted to PNG format from a buffer.
+        """
+
         height_noise1 = PerlinNoise(7, self._seed)
         height_noise2 = PerlinNoise(14, self._seed)
         height_noise3 = PerlinNoise(28, self._seed)
@@ -115,61 +198,3 @@ class TileMap:
         img = Image.fromarray(self._map_array, mode="RGB")
         img.save(buffer, "PNG")
         return buffer.getvalue()
-
-    def save_map(self, map_name):
-        img = Image.fromarray(self._map_array)
-        # img.show()
-        img.save(f"{map_name}.png")
-
-
-def load_map(file_handle):
-    data = json.load(file_handle)
-    height = data[0]
-    width = data[1]
-    seed = data[2] if data[2] != " " else None
-    map_to_load = TileMap(height, width, seed)
-
-    array_in_file = data[3:]
-    for position in range(height * width):
-        pixel = array_in_file[position]
-        row = (pixel["y_axis"])
-        column = (pixel["x_axis"])
-        map_to_load._map_array[row][column][0] = np.uint8(pixel["red"])
-        map_to_load._map_array[row][column][1] = np.uint8(pixel["green"])
-        map_to_load._map_array[row][column][2] = np.uint8(pixel["blue"])
-
-    return map_to_load
-
-
-def write_map(map_to_save: TileMap, file_handle):
-    data = []
-    data.append(map_to_save.height)
-    data.append(map_to_save.width)
-    if map_to_save.seed is not None:
-        data.append(map_to_save.seed)
-    else:
-        data.append(" ")
-
-    for row in range(map_to_save._height):
-        for column in range(map_to_save._width):
-            red_value = int(map_to_save._map_array[row][column][0])
-            green_value = int(map_to_save._map_array[row][column][1])
-            blue_value = int(map_to_save._map_array[row][column][2])
-
-            one_pixel = dict(y_axis=row, x_axis=column,
-                            red=red_value,
-                            green=green_value,
-                            blue=blue_value)
-
-            data.append(one_pixel)
-
-    json.dump(data, file_handle, indent=5)
-
-
-def main():
-    test_map = TileMap(50, 50)
-    test_map.generate_map()
-    test_map.save_map("map1")
-
-if __name__ == "__main__":
-    main()
