@@ -12,8 +12,8 @@ def test_initialization_typical():
     assert tilemap.seed == 10
     for row in range(10):
         for column in range(10):
-            for byte in range(3):
-                assert tilemap._map_array[row][column][byte] == 0
+            for colour in range(3):
+                assert tilemap._map_array[row][column][colour] == 0
 
 
 def test_initialization_default():
@@ -23,8 +23,8 @@ def test_initialization_default():
     assert tilemap._seed == None
     for row in range(50):
         for column in range(50):
-            for byte in range(3):
-                assert tilemap._map_array[row][column][byte] == 0
+            for colour in range(3):
+                assert tilemap._map_array[row][column][colour] == 0
 
 
 def test_initialization_wrong_seed_type():
@@ -47,6 +47,15 @@ def test_initialization_wrong_height_or_width_value():
         TileMap(-10, 10)
         TileMap(10, -10)
         TileMap(-10, -10)
+
+
+def test_generate_map_is_filled_up():
+    tilemap = TileMap(100, 90)
+    tilemap.generate_map()
+    for row in range(100):
+        for column in range(90):
+            for colour in range(3):
+                assert tilemap._map_array[row][column][colour] != None
 
 
 def test_get_terrain_one_candidate():
