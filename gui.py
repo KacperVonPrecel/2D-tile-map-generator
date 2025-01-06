@@ -9,7 +9,28 @@ from twoD_tile_map import TileMap
 
 
 class MapGeneratorWindow(QMainWindow):
+    """
+    A class representing a windowed application. The layout, buttons and other widgets
+    were decalred and set in ui_mapgenerator.py file. Methods in this class mainly focus
+    on adding funcionality to used widgets in the application.
+
+    Attributes:
+        ui - The pinpoint to user interface located in ui_mapgenerator.py
+        _pix_height (int) - A value of a current map's height stored for map scaling
+        _pix_width (int) - A value of a current map's width stored for map scaling
+
+    """
+
     def __init__(self, parent=None):
+        """
+        Initializes a window of the application.
+
+        Parameters:
+            parent (class type): The name of parent class, it allows to use a design
+                                made in the Qt Designer
+
+        """
+
         super().__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -22,12 +43,21 @@ class MapGeneratorWindow(QMainWindow):
         self._pix_width = 50
 
     def setupbuttons(self):
+        """
+        A method that contain calls for certain methods
+        based on what signals were delivered from the input widgets.
+
+        """
         self.ui.generate_map_button.clicked.connect(self.generate_map_img)
         self.ui.actionLoad_Map.triggered.connect(self.load_map)
         self.ui.actionSave_Map.triggered.connect(self.save_map)
         self.ui.scaleslider.sliderReleased.connect(self.scalemap)
 
     def scalemap(self):
+        """
+        Scales the current map to make it easier to read it.
+        """
+
         scalefactor = self.ui.scaleslider.value()
         pixmap = self.ui.map_box.pixmap()
         scaled_pixmap = pixmap.scaled(self._pix_width * scalefactor,
@@ -36,6 +66,12 @@ class MapGeneratorWindow(QMainWindow):
         self.ui.map_box.setPixmap(scaled_pixmap)
 
     def generate_map_img(self):
+        """
+        Reads information from width, height and seed box.
+        Then creates instance of TileMap class and invoke generation of the map.
+        At the end converts a map from bytes to pixmap and shows the map.
+        """
+
         self.ui.scaleslider.setSliderPosition(0)
         if self.ui.height_box.text():
             self._pix_height = int(self.ui.height_box.text())
@@ -56,11 +92,22 @@ class MapGeneratorWindow(QMainWindow):
             self.ui.map_box.setPixmap(pixmap)
 
     def save_map(self):
+        """
+        A method that asks the user where he/she wants it to be saved on their machine.
+        """
+
         name, _ = QFileDialog.getSaveFileName(self, 'Save Map')
         map_to_save = self.ui.map_box.pixmap()
-        map_to_save.save(name)
+        map_to_save.scaled(self._pix_width,
+                           self._pix_height,
+                           Qt.AspectRatioMode.KeepAspectRatio)
+        map_to_save.save(f"{name}.png")
 
     def load_map(self):
+        """
+        A method that asks the user what map he/she wants to load into
+        the display window of the application.
+        """
         name, _ = QFileDialog.getOpenFileName(self, 'Load Map')
         map_to_load = QPixmap()
         map_to_load.load(name)
@@ -71,6 +118,9 @@ class MapGeneratorWindow(QMainWindow):
 
 
 def guimain(args):
+    """
+    A function that starts the windowed application.
+    """
     app = QApplication(args)
     window = MapGeneratorWindow()
     window.show()

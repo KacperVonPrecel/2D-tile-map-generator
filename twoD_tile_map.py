@@ -8,7 +8,7 @@ from io import BytesIO
 
 def difference_val(terrain: Terrain, height: float, moisture: float, temp: float):
     """
-    Function used to calculate difference value for given terrain and given pixel of map.
+    Function used to calculate difference value for given terrain and given pixel of map
 
     Parameters:
         terrain: A terrain of Terrain class
@@ -98,8 +98,23 @@ def create_array(
 class TileMap:
     """
     Class used to represent a 2d tile map.
+
+    Atrributes:
+        seed (int): A special number used to generate constantly the same noise map
+        map_array (numpy 3d_array): An array storing RGB values for each pixel of a map
+        height (int): A height of the map
+        width (int): A width of the map
     """
+
     def __init__(self, height=50, width=50, seed=None):
+        """
+        Initializes a TileMap object.
+
+        Parameters:
+            height (int): A height of the map
+            width (int): A width of the map
+            seed (int): A special number used to generate constantly the same noise map
+        """
         self._seed = seed
         self._map_array = np.zeros([height, width, 3], dtype=np.uint8)
         self._height = height
@@ -118,6 +133,14 @@ class TileMap:
         return self._seed
 
     def generate_map(self):
+        """
+        Generate three noise maps of height, moisture and temperature
+        in order to fill up map_array with RGB values.
+
+        Then method returns bytes representation of the map
+        converted to PNG format from a buffer.
+        """
+
         height_noise1 = PerlinNoise(7, self._seed)
         height_noise2 = PerlinNoise(14, self._seed)
         height_noise3 = PerlinNoise(28, self._seed)

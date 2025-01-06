@@ -1,6 +1,6 @@
 class Terrain:
     """
-    A class representing a certain type of terrain.
+    A class representing a certain type of terrain that can be present on the map.
 
     Attributes:
         name: The name of the terrain
