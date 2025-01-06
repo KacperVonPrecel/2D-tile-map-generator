@@ -29,24 +29,24 @@ def test_initialization_default():
 
 def test_initialization_wrong_seed_type():
     with pytest.raises(TypeError):
-        tilemap1 = TileMap(10, 10, "aaa")
+        TileMap(10, 10, "aaa")
 
 
 def test_initialization_wrong_seed_value():
     with pytest.raises(ValueError):
-        tilemap1 = TileMap(10, 10, -10)
+        TileMap(10, 10, -10)
 
 
 def test_initialization_wrong_height_or_width_type():
     with pytest.raises(TypeError):
-        tilemap1 = TileMap("ab", "cd")
+        TileMap("ab", "cd")
 
 
 def test_initialization_wrong_height_or_width_value():
     with pytest.raises(TypeError):
-        tilemap1 = TileMap(-10, 10)
-        tilemap2 = TileMap(10, -10)
-        tilemap3 = TileMap(-10, -10)
+        TileMap(-10, 10)
+        TileMap(10, -10)
+        TileMap(-10, -10)
 
 
 def test_get_terrain_one_candidate():
