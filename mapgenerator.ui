@@ -176,7 +176,7 @@
            </size>
           </property>
           <property name="placeholderText">
-           <string>Seed (numercial)</string>
+           <string>Seed (integer)</string>
           </property>
          </widget>
         </item>

@@ -182,7 +182,7 @@ class Ui_MainWindow(object):
         self.height_box.setPlaceholderText(_translate("MainWindow", "Height "))
         self.label.setText(_translate("MainWindow", "X"))
         self.width_box.setPlaceholderText(_translate("MainWindow", "Width"))
-        self.seed_box.setPlaceholderText(_translate("MainWindow", "Seed (numercial)"))
+        self.seed_box.setPlaceholderText(_translate("MainWindow", "Seed (integer)"))
         self.generate_map_button.setText(_translate("MainWindow", "Generate Map"))
         self.label_2.setText(_translate("MainWindow", "Scale of map:"))
         self.menuLoad.setTitle(_translate("MainWindow", "File"))

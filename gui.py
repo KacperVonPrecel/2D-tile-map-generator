@@ -97,11 +97,12 @@ class MapGeneratorWindow(QMainWindow):
         """
 
         name, _ = QFileDialog.getSaveFileName(self, 'Save Map')
-        map_to_save = self.ui.map_box.pixmap()
-        map_to_save.scaled(self._pix_width,
-                           self._pix_height,
-                           Qt.AspectRatioMode.KeepAspectRatio)
-        map_to_save.save(f"{name}.png")
+        if name:
+            map_to_save = self.ui.map_box.pixmap()
+            map_to_save.scaled(self._pix_width,
+                               self._pix_height,
+                               Qt.AspectRatioMode.KeepAspectRatio)
+            map_to_save.save(f"{name}.png")
 
     def load_map(self):
         """
@@ -109,12 +110,13 @@ class MapGeneratorWindow(QMainWindow):
         the display window of the application.
         """
         name, _ = QFileDialog.getOpenFileName(self, 'Load Map')
-        map_to_load = QPixmap()
-        map_to_load.load(name)
-        map_to_load.scaled(map_to_load.width(),
-                           map_to_load.height(),
-                           Qt.AspectRatioMode.KeepAspectRatio)
-        self.ui.map_box.setPixmap(map_to_load)
+        if name:
+            map_to_load = QPixmap()
+            map_to_load.load(name)
+            map_to_load.scaled(map_to_load.width(),
+                               map_to_load.height(),
+                               Qt.AspectRatioMode.KeepAspectRatio)
+            self.ui.map_box.setPixmap(map_to_load)
 
 
 def guimain(args):
