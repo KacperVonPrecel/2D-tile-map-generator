@@ -40,23 +40,23 @@ Po pierwsze, należy uruchomić skrypt zawarty w pliku "gui.py". Dzięki temu ur
 
 Po otworzeniu się aplikacji użytkownik ujrzy przy górnej krawędzi trzy okienka na dane wejściowe do gneracji, odpowiednio podpisane. Obok tych pól na prawo znajduję się przycisk "Generate Map" odpowiadający za generację mapy. Na pasku narzędzi znajdują się dwa przyciski odpwiednio do zapisu obecnej mapy i do wczytania mapy z maszyny. Te dwa działania można też znaleźć w menu "File" znajdującym się w lewym górnym rogu okienka. Pod tym wszystkim znajduje się suwak do przybliżania mapy oraz zaznaczona przestzeń, w której pojawi się obraz mapy.
 
-# Generacja mapy
+### Generacja mapy
 
 Aby wygenerować mapę należy przycisnąć przycisk "Generate Map" i odczekać cierpliwie na wygenerowanie się mapy (przy dużych rozmiarach może to potrwać chwilkę).
 
 Domyślnie program generuje mapy o wymiarach 50 x 50 z losowym seedem. Aby zmienić rozmiar generowanej mapy należy wypełnić pola "Height" oraz "Width". Pole "Seed" jest opcjonalne. Pola "Height", "Width" i "Seed" mają ustawiony limit liczbowy wynoszący od 1 do 9999. Po wypełnieniu pól należy przycisnąć przycisk "Generate Map" i odczekać cierpliwie.
 
-# Przybliżanie mapy
+### Przybliżanie mapy
 
 Przybliżanie mapy polega na przesuwaniu suwaka "Scale of map" nad mapą w prawo. Maksymalnie można przybliżyć mapę ośmiokrotnie. Warto nadmienić, żeby przybliżenie zadziałało należy przesunąć kursorem rączkę suwaka na wybrane pole i go puścić.
 
-# Zapis mapy
+### Zapis mapy
 
 Aby zapisać mapę należy kliknąć opcję "Save Map". Można to zrobić z paska narzędzi albo z menu "File". Po wciśnięciu przycisku otworzy się nowe okno, w którym można wybrać miejsce zapisu i nazwę pliku z mapą. Program automatycznie zapisuje plik w formacie PNG, więc proszę wpisać w polu nazwy samą nazwę pliku bez rozszerzenia typu.
 
 UWAGA: Zapisany jest ORYGINAŁ mapy, a nie jego przybliżony obraz.
 
-# Wczytanie mapy
+### Wczytanie mapy
 
 Aby wczytać mapę należy kliknąć opcję "Load Map". Można to zrobić z paska narzędzi albo z menu "File". Po wciśnięciu przycisku otworzy się nowe okno, w którym można wybrać który plik należy wczytać. Program przymuje różne formaty plików graficznych (PNG, JPEG, itd.), ale zalecam użycie formatu PNG.
 
