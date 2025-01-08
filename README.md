@@ -2,92 +2,74 @@
 
 
 
-## Getting started
+## Autor
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Autorem powyższego programu jest Kacper Skrodzki.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Cel projektu
 
-## Add your files
+Celem tego projektu było stworzenie prostego generatora dwuwymiarowych map kafelkowych. Generator taki po przyjęciu danych o wymiarach żądanej mapy ma graficznie przedstawić wygenerowany wynik oraz ma umożliwić zapis oraz wczytanie danej mapy.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## Opis zewnętrzny - funkcjonalności
 
-```
-cd existing_repo
-git remote add origin https://gitlab-stud.elka.pw.edu.pl/kskrodzk/2d-tile-map-generator.git
-git branch -M main
-git push -uf origin main
-```
+Generator działa jako aplikacja okienkowa. Po uruchomieniu pliku z interfejsem użytkownika generator pozwala użytkownikowi na załadowanie pliku ze swojej maszyny lub wygenerowanie mapy o podanych przez użytkownikach wymiarach lub skorzystania z domyślnego wymiaru 50 x 50 pikseli. Dodatkowo program pozwala użytkownikowi na wprowadzenie seed-u, czyli ustalenia w jakiej pozycji startowej ma działać generator losowy.
 
-## Integrate with your tools
+Generacja odbywa się proceduralnie przy użyciu szumów Perlina.
 
-- [ ] [Set up project integrations](https://gitlab-stud.elka.pw.edu.pl/kskrodzk/2d-tile-map-generator/-/settings/integrations)
+Po ukazaniu wygenerowanej mapy w interfejsie użytkownik ma możliwość powiększyć widzoczną mapę dla przejżystości odczytu oraz ma możliwość zapisania wygenerowanej mapy w formacie PNG.
 
-## Collaborate with your team
+## Opis wewnętrzny - klasy
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Klasa TileMap:
+    Odpowiada za samą kreację mapy i przetrzymania jej danych. Przy inicjalizacji zostaje utworzona pusta mapa jako tablica trójwymiarowa o wymiarach "wysokość" x "szerokość" x 3 zapisana samymi zerami. Struktura tablicy została specjalnie tak wybrana, aby można było użyć kodu RGB w celu zapisania informacji o danych kolorach pikseli.
 
-## Test and Deploy
+Klasa Terrain:
+    Klasa odpowiadająca za reprezentację inforamcji o danym terenie. Przechowuje kolor terenu zapisany w kodzie RGB oraz przechowuje kluczowe wartości minimalne trzech współczynników: wysokości, wilgotności i temperatury potrzebne do przydzielania odpowiedniego typu terenu dla danej pozycji na mapie.
 
-Use the built-in continuous integration in GitLab.
+Klasa Ui_MainWindow:
+    Klasa odpowiadająca za układ widżetów w aplikacji okienkowej. Automatycznie generowana przy pomocy narzędzia Qt Designer.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+Klasa MapGeneratorWindow:
+    Klasa dziedzicząca po klasie QMainWindow. Odpowiada za obsługę widżetów aplikacji oraz jej uruchomienie i wyświetlenie. Ponadto obsługuje akcję zapisu i wczytaniu mapy oraz możliwość powiększania wygenerowanej mapy.
 
-***
+## Instrukcja użytkowania
 
-# Editing this README
+Aby móc korzystać w pełni z opracowanego generatora należy zapoznać się z niniejszą instrukcją.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Po pierwsze, należy uruchomić skrypt zawarty w pliku "gui.py". Dzięki temu uruchomi się interfejs użytkownika.
 
-## Suggestions for a good README
+Po otworzeniu się aplikacji użytkownik ujrzy przy górnej krawędzi trzy okienka na dane wejściowe do gneracji, odpowiednio podpisane. Obok tych pól na prawo znajduję się przycisk "Generate Map" odpowiadający za generację mapy. Na pasku narzędzi znajdują się dwa przyciski odpwiednio do zapisu obecnej mapy i do wczytania mapy z maszyny. Te dwa działania można też znaleźć w menu "File" znajdującym się w lewym górnym rogu okienka. Pod tym wszystkim znajduje się suwak do przybliżania mapy oraz zaznaczona przestzeń, w której pojawi się obraz mapy.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+# Generacja mapy
 
-## Name
-Choose a self-explaining name for your project.
+Aby wygenerować mapę należy przycisnąć przycisk "Generate Map" i odczekać cierpliwie na wygenerowanie się mapy (przy dużych rozmiarach może to potrwać chwilkę).
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Domyślnie program generuje mapy o wymiarach 50 x 50 z losowym seedem. Aby zmienić rozmiar generowanej mapy należy wypełnić pola "Height" oraz "Width". Pole "Seed" jest opcjonalne. Pola "Height", "Width" i "Seed" mają ustawiony limit liczbowy wynoszący od 1 do 9999. Po wypełnieniu pól należy przycisnąć przycisk "Generate Map" i odczekać cierpliwie.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+# Przybliżanie mapy
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Przybliżanie mapy polega na przesuwaniu suwaka "Scale of map" nad mapą w prawo. Maksymalnie można przybliżyć mapę ośmiokrotnie. Warto nadmienić, żeby przybliżenie zadziałało należy przesunąć kursorem rączkę suwaka na wybrane pole i go puścić.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+# Zapis mapy
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Aby zapisać mapę należy kliknąć opcję "Save Map". Można to zrobić z paska narzędzi albo z menu "File". Po wciśnięciu przycisku otworzy się nowe okno, w którym można wybrać miejsce zapisu i nazwę pliku z mapą. Program automatycznie zapisuje plik w formacie PNG, więc proszę wpisać w polu nazwy samą nazwę pliku bez rozszerzenia typu.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+UWAGA: Zapisany jest ORYGINAŁ mapy, a nie jego przybliżony obraz.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+# Wczytanie mapy
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Aby wczytać mapę należy kliknąć opcję "Load Map". Można to zrobić z paska narzędzi albo z menu "File". Po wciśnięciu przycisku otworzy się nowe okno, w którym można wybrać który plik należy wczytać. Program przymuje różne formaty plików graficznych (PNG, JPEG, itd.), ale zalecam użycie formatu PNG.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Wnioski i przemyślenia
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Temat projektu okazał się ciekawym zagadnieniem. Przyjemnie było sobie poczytać o różnych sposobach proceduralnej generacji map do gier wideo. Dużą inspiracją był oczywiście Minecraft i jego generacja świata, która też bazuje w dużej mierze na szumach Perlina. Ponadto w internecie znalazłem wiele wątków dotyczących tematu mojego projektu. Nawet znalazłem stronę z takim przykładowym generatorem zrobionym w Unity.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Dużą pomocą w projekcie było to iż znalazłem bibliotekę obsługującą generację szumów Perlina oraz ogólna ilość bibliotek użytach w tym projekcie. Skróciły one czas pisania kodu tego programu. Nie żeby generator szumó Perlina był skomplikowany do zaimplementowania, ale jak już ktoś wyłożył matematkę i to udostępnił, to czemu nie skorzystać?
 
-## License
-For open source projects, say how it is licensed.
+Jednakże nawet z taką ilością bibliotek wiążę się pewna odpowiedzialność i bolączka. Mianowicie, większość czasu poświęciłem na czytaniu dokumentacji bibliotek, badaniu różnych rozwiązań na dane problemy, na przykład jak przchowywać mapę. A szczególnie trudności zaczęły się w trakcie implementacji GUI.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Samo pobranie odpowiednich narzędzi zajęło mi jeden dzień, gdzyż pracując na środowisku Linuxowym na Windowsie nie wiedziałem, że trzeba pobrać XSerwer, aby umożliwić wyświetalanie zawartości przez podsystem. Nie skojarzyłem faktu iż na Teamsach jest filmik dotyczący tego zagadnienia, lecz w samym filmiku o GUI nie było o tym mowy, a gdy wyskoczył, na przykład, błąd segmentacji w przypadku PySide2 to zacząłem szukać rozwiązania tego błędu, a nie szukania ogólnie jak to działa na środowiskach.
+
+Koniec końców udało się rozwiązać ten problem - po prostu przeszedłem na czystego Windowsa. Jednakże to nie koniec problemów z GUI, gdyż Qt jest dla mnie obce i ciężko było się połapać co, gdzie i jak. Ale przy pomocy Youtube-a, dokumentacji PyQt6, Stack OverFlow-a lub innych podobnych serwisów oraz cierpliwej analizie przykładów udało się osiągnąć to co chciałem.
+
+To co chciałem zaimplementować to zaimplementowałem. Udało się tyle zrobić na ile na to pozwolił czas. Jestem całkiem zadowolony ze swojej pracy i obym mógł dalej się rozwijać. Na pewno wyciągnąłem jeden bardzo ważny wniosek: dokumentacja to dobry poradnik do tego jak coś zrobić.
