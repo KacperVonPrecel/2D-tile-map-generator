@@ -1,6 +1,8 @@
 # 2D tile-map generator
 
+## Wstęp
 
+Projekt był napisany w ramach przedmiotu PIPR - Podstawy Informatyki i Progrmowania - na Politechnice Warszawskiej w semestrze zimowym 2024 roku. Jeden z moich pierwszych samodzielnych projektów na uczelni. Posiada sporo niedopatrzeń, ale daje poczucie progresu.
 
 ## Autor
 
